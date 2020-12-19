@@ -64,7 +64,7 @@
 					<div class="box-body">
 						@if($list_menu == 'paystack')
 							<!-- Paystack - Secret Key -->
-							{{dd($currencyPaymentMethod->method_data)}}
+							
 							<div class="form-group">
 								<label class="col-sm-3 control-label" for="paystack[secret_key]">Secret Key</label>
 								<div class="col-sm-5">
@@ -219,6 +219,7 @@
 							</div>
 
 						@elseif ($list_menu == 'paypal')
+						{{dd($currencyPaymentMethod->method_data)}}
 							<!-- paypal - Client ID -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label" for="paypal[client_id]">Client ID</label>
