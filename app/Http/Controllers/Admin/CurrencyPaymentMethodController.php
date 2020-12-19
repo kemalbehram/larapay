@@ -108,6 +108,19 @@ class CurrencyPaymentMethodController extends Controller
                     $currencyPaymentMethod->activated_for = json_encode(['' => '']);
                 }
             }
+            elseif (!empty($request->paystack))
+            {
+                $currencyPaymentMethod->method_data = json_encode($request->paystack);
+
+                if (isset($request->paystack_status) && $request->paystack_status == 'Active')
+                {
+                    $currencyPaymentMethod->activated_for = json_encode(['deposit' => '']);
+                }
+                else
+                {
+                    $currencyPaymentMethod->activated_for = json_encode(['' => '']);
+                }
+            }
             elseif (!empty($request->paypal))
             {
                 $currencyPaymentMethod->method_data = json_encode($request->paypal);
@@ -183,6 +196,18 @@ class CurrencyPaymentMethodController extends Controller
             {
                 $currencyPaymentMethod->method_data = json_encode($request->stripe);
                 if (isset($request->stripe_status) && $request->stripe_status == 'Active')
+                {
+                    $currencyPaymentMethod->activated_for = json_encode(['deposit' => '']);
+                }
+                else
+                {
+                    $currencyPaymentMethod->activated_for = json_encode(['' => '']);
+                }
+            }
+            elseif (!empty($request->paystack))
+            {
+                $currencyPaymentMethod->method_data = json_encode($request->paystack);
+                if (isset($request->paystack_status) && $request->paystack_status == 'Active')
                 {
                     $currencyPaymentMethod->activated_for = json_encode(['deposit' => '']);
                 }
