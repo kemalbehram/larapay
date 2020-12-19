@@ -519,7 +519,7 @@ class DepositController extends Controller
     public function PaystackHandleCallback()
     {
         $paymentDetails = Paystack::getPaymentData();
-
+        dd($request);
         // dd($paymentDetails);
         actionSessionCheck();
 
