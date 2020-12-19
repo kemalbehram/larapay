@@ -6,7 +6,7 @@
                 <div class="col-md-8 mb20 marginTopPlus">
                     @include('user_dashboard.layouts.common.alert')
                     <div class="card">
-                        <div class="card-header"><h4 class="float-left">@lang('message.dashboard.deposit.deposit-stripe-form.title')</h4></div>
+                        <div class="card-header"><h4 class="float-left">Pay With Paystack</h4></div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8" class="form-horizontal" role="form">
                                 @csrf
@@ -22,11 +22,18 @@
                             
                                        
                             
-                                        <p>
+                                        {{-- <p>
                                             <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
                                                 <i class="fa fa-plus-circle fa-lg"></i> Pay with Paystack!
                                             </button>
-                                        </p>
+                                        </p> --}}
+                                        
+                                        <div class="row mt20">
+                                            <div class="col-md-12">
+                                                <div class="pull-left">Deposit Amount</div>
+                                                <div class="pull-right"><strong>₦ {{$data['amount']}}</strong></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
