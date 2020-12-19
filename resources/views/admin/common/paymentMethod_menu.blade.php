@@ -10,6 +10,9 @@
         <a data-spinner="true" href='{{ url('admin/settings/payment-methods/mts/'.$currency->id) }}'>Mts</a>
       </li> --}}
 
+      <li {{ isset($list_menu) &&  $list_menu == 'paystack' ? 'class=active' : ''}} >
+        <a data-spinner="true" href='{{ url('admin/settings/payment-methods/paystack/'.$currency->id) }}'>Paystack</a>
+      </li>
       <li {{ isset($list_menu) &&  $list_menu == 'stripe' ? 'class=active' : ''}} >
         <a data-spinner="true" href='{{ url('admin/settings/payment-methods/stripe/'.$currency->id) }}'>Stripe</a>
       </li>

@@ -82,7 +82,7 @@
 
 							<!-- paystack - Publishable Key -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label" for="paystack[publishable_key]">Publishable Key</label>
+								<label class="col-sm-3 control-label" for="paystack[publishable_key]">API Key</label>
 								<div class="col-sm-5">
 
 									<input class="form-control" name="paystack[publishable_key]" type="text" placeholder="paystack Publishable Key"
