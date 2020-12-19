@@ -64,7 +64,7 @@
 					<div class="box-body">
 						@if($list_menu == 'paystack')
 							<!-- Paystack - Secret Key -->
-							{{-- {{dd($currencyPaymentMethod->method_data)}} --}}
+							{{dd($currencyPaymentMethod->method_data)}}
 							<div class="form-group">
 								<label class="col-sm-3 control-label" for="paystack[secret_key]">Secret Key</label>
 								<div class="col-sm-5">
