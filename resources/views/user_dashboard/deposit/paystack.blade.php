@@ -13,11 +13,11 @@
                                 <div class="row" style="margin-bottom:40px;">
                                     <div class="col-md-8 col-md-offset-2">
                                      
-                                        <input type="hidden" name="email" value="{{$data->email}}"> {{-- required --}}
+                                        <input type="hidden" name="email" value="{{$email}}"> {{-- required --}}
                                         <input type="hidden" name="orderID" value="345">
-                                        <input type="hidden" name="amount" value="{{$data->amount}}"> {{-- required in kobo --}}
-                                        <input type="hidden" name="currency" value="{{$data->currencyCode}}">
-                                        <input type="hidden" name="reference" value="{{ $data->reference }}"> {{-- required --}}
+                                        <input type="hidden" name="amount" value="{{$amount}}"> {{-- required in kobo --}}
+                                        <input type="hidden" name="currency" value="{{$currencyCode}}">
+                                        <input type="hidden" name="reference" value="{{ $reference }}"> {{-- required --}}
                                      {{-- works only when using laravel 5.1, 5.2 --}}
                             
                                        
