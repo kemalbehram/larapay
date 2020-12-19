@@ -4,7 +4,7 @@
     <!--daterangepicker-->
     <link rel="stylesheet" type="text/css" href="{{asset('public/user_dashboard/css/daterangepicker.css')}}">
 @endsection
-
+{{ dd($transaction)}}
 @section('content')
     <section class="section-06 history padding-30">
         <div class="container">
@@ -128,7 +128,7 @@
                                     </thead>
                                     <tbody>
                                     @if($transactions->count()>0)
-                                   {{ dd($transaction)}}
+                                   
                                         @foreach($transactions as $key=>$transaction)
 
                                             <tr click="0" data-toggle="collapse" data-target="#collapseRow{{$key}}"
