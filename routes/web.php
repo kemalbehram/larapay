@@ -495,7 +495,7 @@ Route::group(['middleware' => ['guest:users', 'locale', 'twoFa', 'check-user-ina
         Route::post('deposit/payumoney_fail', 'DepositController@payumoneyPaymentFail');
 
         //Paystack
-        Route::post('deposit/paystack/callback', 'PaystackRedirectToGateway@redirectToGateway')->name('pay');
+        Route::post('deposit/paystack/callback', 'DepositController@PaystackRedirectToGateway')->name('pay');
         Route::get('deposit/paystack_payment', 'DepositController@paystackPayment');
         Route::get('deposit/paystack_confirm', 'DepositController@PaystackHandleCallback');
         Route::get('deposit/paystack_success', 'DepositController@PaystackPaymentSuccess')->name('deposit.paystack.success');
