@@ -526,7 +526,13 @@ class DepositController extends Controller
         $uuid         = unique_code();
 
         $paymentDetails = Paystack::getPaymentData();
-      
+        $ref_code = $paymentDetails['data']['authorization']['authorization_code'];
+        if(Transaction::where('uuid', $ref_code)->count() == 1){
+            session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'mode', 'key', 'salt', 'transInfo']);
+            clearActionSession();
+            return redirect('deposit');
+           
+        }
             $feeInfo    = $this->helper->getFeesLimitObject([], Deposit, $sessionValue['currency_id'], $sessionValue['payment_method'], null, ['charge_percentage', 'charge_fixed']);
             $p_calc     = $sessionValue['amount'] * (@$feeInfo->charge_percentage / 100);
             $total_fees = $p_calc+@$feeInfo->charge_fixed;
@@ -554,7 +560,7 @@ class DepositController extends Controller
                 $transaction->payment_method_id        = Session::get('payment_method_id');
                 $transaction->transaction_reference_id = $deposit->id;
                 $transaction->transaction_type_id      = Deposit;
-                $transaction->uuid                     = $uuid;
+                $transaction->uuid                     = $ref_code;
                 $transaction->subtotal                 = $present_amount;
                 $transaction->percentage               = @$feeInfo->charge_percentage ? @$feeInfo->charge_percentage : 0;
                 $transaction->charge_percentage        = $deposit->charge_percentage;
