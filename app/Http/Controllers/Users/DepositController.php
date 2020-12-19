@@ -498,13 +498,13 @@ class DepositController extends Controller
         //Check Currency Code - starts - pm_v2.3
         $currency_id  = session('transInfo')['currency_id'];
         $currencyCode = Currency::where(['id' => $currency_id])->first(['code'])->code;
-        if ($currencyCode !== 'NGN' || $currencyCode !== 'USD' )
-        {
-            session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'transInfo']);
-            clearActionSession();
-            $this->helper->one_time_message('error', __('Paystack only supports Nigeria Naira and Dollar'));
-            return redirect('deposit');
-        }
+        // if ($currencyCode !== 'NGN' || $currencyCode !== 'USD' )
+        // {
+        //     session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'transInfo']);
+        //     clearActionSession();
+        //     $this->helper->one_time_message('error', __('Paystack only supports Nigeria Naira and Dollar'));
+        //     return redirect('deposit');
+        // }
         $amount            = session('transInfo')['amount']; 
         $amount1 = $amount.'00';            //fixed - was getting total - should get amount
         $data['amount']    = $amount1; 

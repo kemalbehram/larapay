@@ -9,7 +9,7 @@
                         <div class="card-header"><h4 class="float-left">@lang('message.dashboard.deposit.deposit-stripe-form.title')</h4></div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8" class="form-horizontal" role="form">
-                                @csrf
+                                {{ csrf_field() }} 
                                 <div class="row" style="margin-bottom:40px;">
                                     <div class="col-md-8 col-md-offset-2">
                                      
@@ -18,9 +18,9 @@
                                         <input type="hidden" name="amount" value="{{$data->amount}}"> {{-- required in kobo --}}
                                         <input type="hidden" name="currency" value="{{$data->currencyCode}}">
                                         <input type="hidden" name="reference" value="{{ $data->reference }}"> {{-- required --}}
-                                       
+                                     {{-- works only when using laravel 5.1, 5.2 --}}
                             
-                                   
+                                       
                             
                                         <p>
                                             <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
