@@ -128,6 +128,7 @@
                                     </thead>
                                     <tbody>
                                     @if($transactions->count()>0)
+                                   {{ dd($transaction)}}
                                         @foreach($transactions as $key=>$transaction)
 
                                             <tr click="0" data-toggle="collapse" data-target="#collapseRow{{$key}}"
