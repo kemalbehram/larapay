@@ -80,7 +80,7 @@ class CurrencyPaymentMethodController extends Controller
         $data['banks']                 = Bank::where(['currency_id' => $id])->get();
         $data['countries']             = Country::get(['id', 'name']);
         
-        dd($data['currencyPaymentMethod']);
+        // dd($data['currencyPaymentMethod']);
         return view('admin.currencyPaymentMethod.list', $data);
     }
 
