@@ -82,15 +82,15 @@
 
 							<!-- paystack - Publishable Key -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label" for="paystack[publishable_key]">API Key</label>
+								<label class="col-sm-3 control-label" for="paystack[public_key]">Public Key</label>
 								<div class="col-sm-5">
 
-									<input class="form-control" name="paystack[publishable_key]" type="text" placeholder="paystack Publishable Key"
-									value="{{ isset($currencyPaymentMethod->method_data) ? json_decode($currencyPaymentMethod->method_data)->publishable_key : '' }}" id="paystack_publishable_key">
+									<input class="form-control" name="paystack[public_key]" type="text" placeholder="paystack public Key"
+									value="{{ isset($currencyPaymentMethod->method_data) ? json_decode($currencyPaymentMethod->method_data)->public_key : '' }}" id="paystack_public_key">
 
-									@if ($errors->has('paystack[publishable_key]'))
+									@if ($errors->has('paystack[public_key]'))
 									<span class="help-block">
-										<strong>{{ $errors->first('paystack[publishable_key]') }}</strong>
+										<strong>{{ $errors->first('paystack[public_key]') }}</strong>
 									</span>
 									@endif
 								</div>
