@@ -743,6 +743,7 @@ class SettingController extends Controller
         {
             $data['menu'] = 'payment_methods';
 
+            $data['paystack']      = $paypal      = Setting::where('type', 'Paystack')->pluck('value', 'name', 'id')->toArray();
             $data['paypal']      = $paypal      = Setting::where('type', 'PayPal')->pluck('value', 'name', 'id')->toArray();
             $data['stripe']      = $stripe      = Setting::where('type', 'Stripe')->pluck('value', 'name', 'id')->toArray();
             $data['twoCheckout'] = $twoCheckout = Setting::where('type', '2Checkout')->pluck('value', 'name', 'id')->toArray();
@@ -816,6 +817,40 @@ class SettingController extends Controller
             {
                 Setting::where(['name' => 'secret', 'type' => 'Stripe'])->update(['value' => $request->secret_key]);
                 Setting::where(['name' => 'publishable', 'type' => 'Stripe'])->update(['value' => $request->publishable_key]);
+                $this->helper->one_time_message('success', 'Payment Method Settings Updated Successfully');
+                return redirect('admin/settings/payment_methods');
+                // $data['message'] = 'Updated Successfully';
+                // $data['success'] = 1;
+                // echo json_encode($data);
+            }
+        }
+        else if ($_POST['gateway'] == 'paystack')
+        {
+            // dd('ss');
+            $rules = array(
+                'secret_key'      => 'required',
+                'public_key' => 'required',
+            );
+
+            $fieldNames = array(
+                'secret_key'      => 'Secret Key',
+                'public_key' => 'Public Key',
+            );
+
+            $validator = Validator::make($request->all(), $rules);
+            $validator->setAttributeNames($fieldNames);
+
+            if ($validator->fails())
+            {
+                return back()->withErrors($validator)->withInput();
+                // $data['success'] = 0;
+                // $data['errors']  = $validator->messages();
+                // echo json_encode($data);
+            }
+            else
+            {
+                Setting::where(['name' => 'secret_key', 'type' => 'Paystack'])->update(['value' => $request->secret_key]);
+                Setting::where(['name' => 'public_key', 'type' => 'Paystack'])->update(['value' => $request->public_key]);
                 $this->helper->one_time_message('success', 'Payment Method Settings Updated Successfully');
                 return redirect('admin/settings/payment_methods');
                 // $data['message'] = 'Updated Successfully';

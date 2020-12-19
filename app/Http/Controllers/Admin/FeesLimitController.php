@@ -67,7 +67,7 @@ class FeesLimitController extends Controller
             {
                 $q->where('transaction_type_id', '=', $transaction_type)->where('currency_id', '=', $currency_id);
             }])
-                ->whereNotIn('id', [2, 4, 5, 7, 8, 9]) // ['Stripe', '2Checkout', 'PayUMoney', 'Coinpayments', 'Payeer', 'BlockIo'] respectively
+                ->whereNotIn('id', [2, 4, 5, 7, 8, 9, 10]) // ['Stripe', '2Checkout', 'PayUMoney', 'Coinpayments', 'Payeer', 'BlockIo'] respectively
                 ->where(['status' => 'Active'])
                 ->get(['id', 'name']);
             return view('admin.feeslimits.deposit_limit', $data);
@@ -206,7 +206,7 @@ class FeesLimitController extends Controller
             {
                 $q->where('transaction_type_id', '=', $transaction_type)->where('currency_id', '=', $currency_id);
             }])
-                ->whereNotIn('id', [2, 4, 5, 7, 8, 9]) // ['Stripe', '2Checkout', 'PayUMoney', 'Coinpayments', 'Payeer', 'BlockIo'] respectively
+                ->whereNotIn('id', [2, 4, 5, 7, 8, 9, 10]) // ['Stripe', '2Checkout', 'PayUMoney', 'Coinpayments', 'Payeer', 'BlockIo'] respectively
                 ->where(['status' => 'Active'])->get(['id', 'name']);
         }
         else
@@ -250,7 +250,7 @@ class FeesLimitController extends Controller
             {
                 $q->where('transaction_type_id', '=', $transaction_type)->where('currency_id', '=', $currency_id);
             }])
-                ->whereNotIn('id', [2, 4, 5, 7, 8, 9]) // ['Stripe', '2Checkout', 'PayUMoney', 'Coinpayments', 'Payeer', 'BlockIo'] respectively
+                ->whereNotIn('id', [2, 4, 5, 7, 8, 9, 10]) // ['Stripe', '2Checkout', 'PayUMoney', 'Coinpayments', 'Payeer', 'BlockIo'] respectively
                 ->where(['status' => 'Active'])
                 ->get(['id', 'name']);
             // dd($feeslimit);
