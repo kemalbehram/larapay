@@ -518,100 +518,86 @@ class DepositController extends Controller
 
     public function PaystackHandleCallback()
     {
-        $paymentDetails = Paystack::getPaymentData();
-        
-        // dd($paymentDetails);
         actionSessionCheck();
 
         $sessionValue = session('transInfo');
-        // dd($sessionValue);
+        $user_id      = auth()->user()->id;
+        $amount       = Session::get('amount');
+        $uuid         = unique_code();
 
-        $method            = session('method');
-        $amount            = $sessionValue['totalAmount'];
-        $payment_method_id = $sessionValue['payment_method'];
-        $user_id           = auth()->user()->id;
-        
-        $wallet            = Wallet::where(['currency_id' => $sessionValue['currency_id'], 'user_id' => $user_id])->first(['id', 'currency_id']);
-        $currencyId = $sessionValue['currency_id'];
-     
-        $currencyCode = "NGN";
-        $paymentId = $paymentDetails['data']['authorization']['authorization_code'];
-        
-        if (isset($paymentId) && $paymentId != null)
-        {
-            $currencyPaymentMethod = CurrencyPaymentMethod::where(['currency_id' => $currencyId, 'method_id' => $payment_method_id])->where('activated_for', 'like', "%deposit%")->first(['method_data']);
-            $methodData            = json_decode($currencyPaymentMethod->method_data);
-        
-            $paymentId = $paymentId;
-          
+        $paymentDetails = Paystack::getPaymentData();
+      
+            $feeInfo    = $this->helper->getFeesLimitObject([], Deposit, $sessionValue['currency_id'], $sessionValue['payment_method'], null, ['charge_percentage', 'charge_fixed']);
+            $p_calc     = $sessionValue['amount'] * (@$feeInfo->charge_percentage / 100);
+            $total_fees = $p_calc+@$feeInfo->charge_fixed;
 
-        }
-        else
-        {
-            // Log::error("User Cancelled the transaction");
-            $this->helper->one_time_message('error', __('User Cancelled the transaction!'));
-            session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'transInfo']);
-            clearActionSession();
-            return redirect('deposit');
-        }
-        $uuid    = unique_code();
-        $feeInfo = $this->helper->getFeesLimitObject([], Deposit, $currencyId, $payment_method_id, null, ['charge_percentage', 'charge_fixed']);
-        $p_calc  = $sessionValue['amount'] * (@$feeInfo->charge_percentage / 100); //correct calc
-        dd('error');
-        try
-        {
-            \DB::beginTransaction();
+            try
+            {
+                \DB::beginTransaction();
 
-            //Deposit
-            $deposit                    = new Deposit();
-            $deposit->uuid              = $uuid;
-            $deposit->charge_percentage = @$feeInfo->charge_percentage ? $p_calc : 0;
-            $deposit->charge_fixed      = @$feeInfo->charge_fixed ? @$feeInfo->charge_fixed : 0;
-            $deposit->status            = 'Success';
-            $deposit->user_id           = $user_id;
-            $deposit->currency_id       = $currencyId;
-            $deposit->payment_method_id = $payment_method_id;
-            $deposit->amount            = $present_amount            = ($amount - ($p_calc+@$feeInfo->charge_fixed));
-            $deposit->save();
+                //Deposit
+                $deposit                    = new Deposit();
+                $deposit->user_id           = $user_id;
+                $deposit->currency_id       = $sessionValue['currency_id'];
+                $deposit->payment_method_id = Session::get('payment_method_id');
+                $deposit->uuid              = $uuid;
+                $deposit->charge_percentage = @$feeInfo->charge_percentage ? $p_calc : 0;
+                $deposit->charge_fixed      = @$feeInfo->charge_fixed ? @$feeInfo->charge_fixed : 0;
+                $deposit->amount            = $present_amount            = $amount - $total_fees;
+                $deposit->status            = 'Success';
+                $deposit->save();
 
-            //Transaction
-            $transaction                           = new Transaction();
-            $transaction->user_id                  = $user_id;
-            $transaction->currency_id              = $currencyId;
-            $transaction->payment_method_id        = $payment_method_id;
-            $transaction->transaction_reference_id = $deposit->id;
-            $transaction->transaction_type_id      = Deposit;
-            $transaction->uuid                     = $uuid;
-            $transaction->subtotal                 = $present_amount;
-            $transaction->percentage               = @$feeInfo->charge_percentage ? @$feeInfo->charge_percentage : 0;
-            $transaction->charge_percentage        = $deposit->charge_percentage;
-            $transaction->charge_fixed             = $deposit->charge_fixed;
-            $total_fees                            = $deposit->charge_percentage + $deposit->charge_fixed;
-            $transaction->total                    = $sessionValue['amount'] + $total_fees;
-            $transaction->status                   = 'Success';
-            $transaction->save();
+                //Transaction
+                $transaction                           = new Transaction();
+                $transaction->user_id                  = $user_id;
+                $transaction->currency_id              = $sessionValue['currency_id'];
+                $transaction->payment_method_id        = Session::get('payment_method_id');
+                $transaction->transaction_reference_id = $deposit->id;
+                $transaction->transaction_type_id      = Deposit;
+                $transaction->uuid                     = $uuid;
+                $transaction->subtotal                 = $present_amount;
+                $transaction->percentage               = @$feeInfo->charge_percentage ? @$feeInfo->charge_percentage : 0;
+                $transaction->charge_percentage        = $deposit->charge_percentage;
+                $transaction->charge_fixed             = $deposit->charge_fixed;
+                $transaction->total                    = $sessionValue['amount'] + $total_fees;
+                $transaction->status                   = 'Success';
+                $transaction->save();
 
-            //Wallet
-            $wallet          = Wallet::where(['user_id' => $user_id, 'currency_id' => $currencyId])->first(['id', 'balance']);
-            $wallet->balance = ($wallet->balance + $present_amount);
-            $wallet->save();
+                //Wallet
+                $chkWallet = Wallet::where(['user_id' => $user_id, 'currency_id' => $sessionValue['currency_id']])->first(['id', 'balance']);
+                if (empty($chkWallet))
+                {
+                    $wallet              = new Wallet();
+                    $wallet->user_id     = $user_id;
+                    $wallet->currency_id = $sessionValue['currency_id'];
+                    $wallet->balance     = $present_amount;
+                    $wallet->is_default  = 'No';
+                    $wallet->save();
+                }
+                else
+                {
+                    $chkWallet->balance = ($chkWallet->balance + $present_amount);
+                    $chkWallet->save();
+                }
+                \DB::commit();
 
-            \DB::commit();
+                // Send mail to admin
+                $response = $this->helper->sendTransactionNotificationToAdmin('deposit', ['data' => $deposit]);
 
-            // Send notification to admin
-            $response = $this->helper->sendTransactionNotificationToAdmin('deposit', ['data' => $deposit]);
+                $data['transaction'] = $transaction;
 
-            $data['transaction'] = $transaction;
-            return \Redirect::route('deposit.paystack.success')->with(['data' => $data]);
-        }
-        catch (\Exception $e)
-        {
-            \DB::rollBack();
-            session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'transInfo']);
-            clearActionSession();
-            $this->helper->one_time_message('error', $e->getMessage());
-            return redirect('deposit');
-        }
+                return \Redirect::route('deposit.paystack.success')->with(['data' => $data]);
+            }
+            catch (\Exception $e)
+            {
+                \DB::rollBack();
+                session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'mode', 'key', 'salt', 'transInfo']);
+                clearActionSession();
+                $this->helper->one_time_message('error', $e->getMessage());
+                return redirect('deposit');
+            }
+       
+       
     }
 
     public function PaystackPaymentSuccess()
