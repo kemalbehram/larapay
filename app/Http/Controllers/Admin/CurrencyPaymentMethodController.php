@@ -70,17 +70,17 @@ class CurrencyPaymentMethodController extends Controller
             $tab = 'bank';
         }
         $paymentMethod                 = PaymentMethod::where(['name' => ucfirst($tab), 'status' => 'Active'])->first(['id']);
-        dd($paymentMethod);
         $data['paymentMethod']         = $paymentMethod->id;
         $data['currencyPaymentMethod'] = CurrencyPaymentMethod::where(['method_id' => $paymentMethod->id, 'currency_id' => $id])->first();
-
+        
         $data['currency']              = $this->currency->getCurrency(['id' => $id], ['id','name']);
         $data['currencyList']          = $this->currency->getAllCurrencies(['status' => 'Active', 'type' => 'fiat'], ['id','name']);
-
-
+        
+        
         $data['banks']                 = Bank::where(['currency_id' => $id])->get();
         $data['countries']             = Country::get(['id', 'name']);
-
+        
+        dd($data->currencyPaymentMethod);
         return view('admin.currencyPaymentMethod.list', $data);
     }
 

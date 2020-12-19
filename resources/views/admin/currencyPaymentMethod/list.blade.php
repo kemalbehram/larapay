@@ -219,7 +219,7 @@
 							</div>
 
 						@elseif ($list_menu == 'paypal')
-						{{dd($currencyPaymentMethod->method_data)}}
+						
 							<!-- paypal - Client ID -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label" for="paypal[client_id]">Client ID</label>
@@ -983,7 +983,16 @@
             "stripe[publishable_key]":{
               required: true,
             },
+            "paystack[secret_key]": {
+                required: true,
+            },
+            "paystack[public_key]":{
+              required: true,
+            },
             stripe_status:{
+               required: true,
+            },
+            paystack_status:{
                required: true,
             },
             "paypal[client_id]": {
@@ -1647,6 +1656,9 @@
 
 					$('#stripe_secret_key').val(JSON.parse(data.currencyPaymentMethod.method_data).secret_key);
 					$('#stripe_publishable_key').val(JSON.parse(data.currencyPaymentMethod.method_data).publishable_key);
+					
+					$('#paystack_secret_key').val(JSON.parse(data.currencyPaymentMethod.method_data).secret_key);
+					$('#paystack_public_key').val(JSON.parse(data.currencyPaymentMethod.method_data).public_key);
 
 					$('#paypal_client_id').val(JSON.parse(data.currencyPaymentMethod.method_data).client_id);
 					$('#paypal_client_secret').val(JSON.parse(data.currencyPaymentMethod.method_data).client_secret);
@@ -1679,6 +1691,7 @@
 					if(activated_for.hasOwnProperty('deposit'))
 					{
 						$('#stripe_status').val('Active');
+						$('#paystack_status').val('Active');
 						$('#paypal_status').val('Active');
 						$('#twoCheckout_status').val('Active');
 						$('#payUMoney_status').val('Active');
@@ -1690,6 +1703,7 @@
 					else
 					{
 					  $('#stripe_status').val('Inactive');
+					  $('#paystack_status').val('Inactive');
 					  $('#paypal_status').val('Inactive');
 					  $('#twoCheckout_status').val('Inactive');
 					  $('#payUMoney_status').val('Inactive');
@@ -1704,6 +1718,9 @@
 					$('#id').val('');
 					$('#stripe_secret_key').val('');
 					$('#stripe_publishable_key').val('');
+
+					$('#paystack_secret_key').val('');
+					$('#paystack_publishable_key').val('');
 
 					$('#paypal_client_id').val('');
 					$('#paypal_client_secret').val('');
@@ -1732,6 +1749,7 @@
 					$('#processing_time').val('');
 
 					$('#stripe_status').val('');
+					$('#paystack_status').val('');
 					$('#paypal_status').val('');
 					$('#twoCheckout_status').val('');
 					$('#payUMoney_status').val('');
@@ -1799,6 +1817,9 @@
 
 					$('#stripe_secret_key').val(JSON.parse(data.currencyPaymentMethod.method_data).secret_key);
 					$('#stripe_publishable_key').val(JSON.parse(data.currencyPaymentMethod.method_data).publishable_key);
+
+					$('#paystack_secret_key').val(JSON.parse(data.currencyPaymentMethod.method_data).secret_key);
+					$('#paystack_public_key').val(JSON.parse(data.currencyPaymentMethod.method_data).public_key);
 
 					$('#paypal_client_id').val(JSON.parse(data.currencyPaymentMethod.method_data).client_id);
 					$('#paypal_client_secret').val(JSON.parse(data.currencyPaymentMethod.method_data).client_secret);
