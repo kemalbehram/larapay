@@ -18,9 +18,9 @@
                                         <input type="hidden" name="amount" value="{{$data->amount}}"> {{-- required in kobo --}}
                                         <input type="hidden" name="currency" value="{{$data->currencyCode}}">
                                         <input type="hidden" name="reference" value="{{ $data->reference }}"> {{-- required --}}
-                                        {{ csrf_field() }} {{-- works only when using laravel 5.1, 5.2 --}}
+                                       
                             
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}"> {{-- employ this in place of csrf_field only in laravel 5.0 --}}
+                                   
                             
                                         <p>
                                             <button class="btn btn-success btn-lg btn-block" type="submit" value="Pay Now!">
