@@ -12,7 +12,7 @@
                                 {{ csrf_field() }} 
                                 <div class="row" style="margin-bottom:40px;">
                                     <div class="col-md-8 col-md-offset-2">
-                                     
+                                     {{dd($data)}}
                                         <input type="hidden" name="email" value="{{$email}}"> {{-- required --}}
                                         <input type="hidden" name="orderID" value="345">
                                         <input type="hidden" name="amount" value="{{$amount}}"> {{-- required in kobo --}}
