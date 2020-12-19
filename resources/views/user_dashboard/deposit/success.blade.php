@@ -16,6 +16,7 @@
                             <div class="h3 mt6 text-success"> @lang('message.dashboard.deposit.success')!</div>
                         </div>
                          <div class="text-center"><p><strong> @lang('message.dashboard.deposit.completed-success')</strong></p></div>
+                         {{dd($transaction->currency)}}
                           <h5 class="text-center mt10">@lang('message.dashboard.deposit.deposit-amount') : {{  moneyFormat($transaction->currency->symbol, formatNumber($transaction->subtotal)) }}</h5>
                     </div>
                     <div class="card-footer" style="margin-top: 10px">
