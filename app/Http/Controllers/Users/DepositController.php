@@ -532,26 +532,9 @@ class DepositController extends Controller
         $user_id           = auth()->user()->id;
         
         $wallet            = Wallet::where(['currency_id' => $sessionValue['currency_id'], 'user_id' => $user_id])->first(['id', 'currency_id']);
-        if (empty($wallet))
-        {
-            $walletInstance              = new Wallet();
-            $walletInstance->user_id     = $user_id;
-            $walletInstance->currency_id = $sessionValue['currency_id'];
-            $walletInstance->balance     = 0;
-            $walletInstance->is_default  = 'No';
-            $walletInstance->save();
-        }
-        
-        $currencyId = isset($wallet->currency_id) ? $wallet->currency_id : $walletInstance->currency_id;
-        $currency   = Currency::find($currencyId, ['id', 'code']);
-        if ($currency)
-        {
-            $currencyCode = $currency->code;
-        }
-        else
-        {
-            $currencyCode = "NGN";
-        }
+        $currency_id => $sessionValue['currency_id'];
+     
+        $currencyCode = "NGN";
         $paymentId = $paymentDetails['data']['authorization']['authorization_code'];
         
         if (isset($paymentId) && $paymentId != null)
