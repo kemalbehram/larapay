@@ -70,6 +70,7 @@ class CurrencyPaymentMethodController extends Controller
             $tab = 'bank';
         }
         $paymentMethod                 = PaymentMethod::where(['name' => ucfirst($tab), 'status' => 'Active'])->first(['id']);
+        dd($paymentMethod);
         $data['paymentMethod']         = $paymentMethod->id;
         $data['currencyPaymentMethod'] = CurrencyPaymentMethod::where(['method_id' => $paymentMethod->id, 'currency_id' => $id])->first();
 
