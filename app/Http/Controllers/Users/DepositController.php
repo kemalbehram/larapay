@@ -532,7 +532,7 @@ class DepositController extends Controller
         $user_id           = auth()->user()->id;
         
         $wallet            = Wallet::where(['currency_id' => $sessionValue['currency_id'], 'user_id' => $user_id])->first(['id', 'currency_id']);
-        $currency_id => $sessionValue['currency_id'];
+        $currency_id = $sessionValue['currency_id'];
      
         $currencyCode = "NGN";
         $paymentId = $paymentDetails['data']['authorization']['authorization_code'];
