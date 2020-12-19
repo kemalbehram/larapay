@@ -420,8 +420,8 @@ class DepositController extends Controller
             }
             else if ($method == 'Paystack')
             {
-                $publishable = $methodData->publishable_key;
-                Session::put('publishable', $publishable);
+                $publishable = $methodData->public_key;
+                Session::put('public', $publishable);
                 return redirect('deposit/paystack_payment');
             }
             else if ($method == '2checkout')
