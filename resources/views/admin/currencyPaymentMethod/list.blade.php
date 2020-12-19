@@ -84,7 +84,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label" for="paystack[public_key]">Public Key</label>
 								<div class="col-sm-5">
-
+									{{dd($currencyPaymentMethod->method_data);}}
 									<input class="form-control" name="paystack[public_key]" type="text" placeholder="paystack public Key"
 									value="{{ isset($currencyPaymentMethod->method_data) ? json_decode($currencyPaymentMethod->method_data)->public_key : '' }}" id="paystack_public_key">
 
