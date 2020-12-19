@@ -557,7 +557,7 @@ class DepositController extends Controller
         $uuid    = unique_code();
         $feeInfo = $this->helper->getFeesLimitObject([], Deposit, $currencyId, $payment_method_id, null, ['charge_percentage', 'charge_fixed']);
         $p_calc  = $sessionValue['amount'] * (@$feeInfo->charge_percentage / 100); //correct calc
-
+        dd('error');
         try
         {
             \DB::beginTransaction();
