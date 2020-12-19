@@ -519,7 +519,7 @@ class DepositController extends Controller
     public function PaystackHandleCallback()
     {
         $paymentDetails = Paystack::getPaymentData();
-        dd($request);
+        
         // dd($paymentDetails);
         actionSessionCheck();
 
@@ -552,13 +552,14 @@ class DepositController extends Controller
         {
             $currencyCode = "NGN";
         }
-
-        if (isset($request->paymentId) && $request->paymentId != null)
+        $paymentId = $paymentDetails['data']['authorization']['authorization_code'];
+        
+        if (isset($paymentId) && $paymentId != null)
         {
             $currencyPaymentMethod = CurrencyPaymentMethod::where(['currency_id' => $currencyId, 'method_id' => $payment_method_id])->where('activated_for', 'like', "%deposit%")->first(['method_data']);
             $methodData            = json_decode($currencyPaymentMethod->method_data);
         
-            $paymentId = $request->paymentId;
+            $paymentId = $paymentId;
           
 
         }
@@ -618,7 +619,7 @@ class DepositController extends Controller
             $response = $this->helper->sendTransactionNotificationToAdmin('deposit', ['data' => $deposit]);
 
             $data['transaction'] = $transaction;
-            return \Redirect::route('deposit.paypal.success')->with(['data' => $data]);
+            return \Redirect::route('deposit.paystack.success')->with(['data' => $data]);
         }
         catch (\Exception $e)
         {
