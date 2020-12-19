@@ -513,7 +513,7 @@ class DepositController extends Controller
         $data['email']     = auth()->user()->email;
         $data['reference']     =  Paystack::genTranxRef();
         $data['firstname'] = auth()->user()->first_name;
-        return view('user_dashboard.deposit.paystack', $data);
+        return view('user_dashboard.deposit.paystack', compact('data'));
     }
 
     public function PaystackHandleCallback()
