@@ -37,6 +37,10 @@ class CurrencyPaymentMethodController extends Controller
         {
             $tab = 'Stripe';
         }
+        elseif ($tab == 'paystack')
+        {
+            $tab = 'Paystack';
+        }
         elseif ($tab == 'paypal')
         {
             $tab = 'Paypal';
