@@ -533,7 +533,7 @@ class DepositController extends Controller
             \DB::rollBack();
                 session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'mode', 'key', 'salt', 'transInfo']);
                 clearActionSession();
-            return redirect('deposit')->with(['message' => 'transaction not found'])
+            return redirect('deposit')->with(['message' => 'transaction not found']);
         }
         // if(Transaction::where('uuid', $ref_code)->count() == 1){
         //     session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'mode', 'key', 'salt', 'transInfo']);
