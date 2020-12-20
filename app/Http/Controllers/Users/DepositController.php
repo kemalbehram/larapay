@@ -526,7 +526,15 @@ class DepositController extends Controller
         $uuid         = unique_code();
 
         $paymentDetails = Paystack::getPaymentData();
-        $ref_code = $paymentDetails['data']['authorization']['authorization_code'];
+        try{
+            $ref_code = $paymentDetails['data']['authorization']['authorization_code'];
+
+        }catch(Exception $error){
+            \DB::rollBack();
+                session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'mode', 'key', 'salt', 'transInfo']);
+                clearActionSession();
+            return redirect('deposit')->with(['message' => 'transaction not found'])
+        }
         // if(Transaction::where('uuid', $ref_code)->count() == 1){
         //     session()->forget(['coinpaymentAmount', 'wallet_currency_id', 'method', 'payment_method_id', 'amount', 'mode', 'key', 'salt', 'transInfo']);
         //     clearActionSession();
