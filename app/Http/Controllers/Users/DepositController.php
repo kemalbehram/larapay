@@ -525,8 +525,8 @@ class DepositController extends Controller
         $amount       = Session::get('amount');
         $uuid         = unique_code();
 
-        $paymentDetails = Paystack::getPaymentData();
         try{
+            $paymentDetails = Paystack::getPaymentData();
             $ref_code = $paymentDetails['data']['authorization']['authorization_code'];
 
         }catch(Exception $error){
