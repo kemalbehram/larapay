@@ -30,8 +30,8 @@
                                         
                                         <div class="row mt20">
                                             <div class="col-md-12">
-                                                <div class="pull-left">Deposit Amount</div>
-                                                <div class="pull-right"><strong>₦ {{$data['amount']}}</strong></div>
+                                                <div >Continue payment with paystack</div>
+                                                
                                             </div>
                                         </div>
                                     </div>
